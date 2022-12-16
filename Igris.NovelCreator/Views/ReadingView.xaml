@@ -1,0 +1,93 @@
+﻿<UserControl x:Class="Igris.NovelCreator.Views.ReadingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:converters="clr-namespace:Igris.NovelCreator.Converters"
+             xmlns:viewModels="clr-namespace:Igris.NovelCreator.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance viewModels:ReadingViewModel}">
+    <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static ApplicationCommands.Find}" Executed="Find_Executed" />
+    </UserControl.CommandBindings>
+    <UserControl.InputBindings>
+        <KeyBinding Key="F" Command="{x:Static ApplicationCommands.Find}" Modifiers="Ctrl"/>
+    </UserControl.InputBindings>
+    <Grid>
+        <Grid Visibility="{Binding ContentIsOpen, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=invert}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0"
+                    Height="36"
+                    Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                    BorderThickness="0 0 0 1">
+                <Border.BorderBrush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="{DynamicResource MahApps.Colors.ThemeBackground}" Offset="0.0"/>
+                        <GradientStop Color="{DynamicResource MahApps.Colors.AccentBase}" Offset="0.5"/>
+                        <GradientStop Color="{DynamicResource MahApps.Colors.ThemeBackground}" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Border.BorderBrush>
+                <TextBox x:Name="FilterTextBox"
+                         MinWidth="400"
+                         Margin="4,2"
+                         mah:TextBoxHelper.Watermark="Filtrer par... (Ctrl+F)"
+                         Background="{DynamicResource MahApps.Brushes.Gray10}"
+                         BorderThickness="0"
+                         HorizontalAlignment="Right"
+                         Style="{DynamicResource Igris.Styles.TextBox.Search}"
+                         Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=300}"/>
+            </Border>
+            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Novels}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel HorizontalAlignment="Center"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button x:Name="NovelButton" Margin="4" Width="200" Height="230" CommandParameter="{Binding}"
+                                    Command="{Binding DataContext.OpenNovelCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="novelBorder" BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}" BorderThickness="1">
+                                            <Grid Margin="2">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Image x:Name="CoverImage" VerticalAlignment="Top" Stretch="Fill" Source="{Binding Cover}"/>
+                                                <TextBlock x:Name="TitleText" Grid.Row="1" Text="{Binding Title}" FontSize="12" MaxHeight="36"
+                                                           TextAlignment="Center" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
+                                            </Grid>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="Background" TargetName="novelBorder" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+                                                <Setter Property="BorderBrush" TargetName="novelBorder" Value="{DynamicResource MahApps.Brushes.AccentBase}"/>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="Background" TargetName="novelBorder" Value="{DynamicResource MahApps.Brushes.AccentBase}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <ContentControl x:Name="NovelContent" Focusable="False" Content="{Binding ContentControl}"/>
+    </Grid>
+</UserControl>

@@ -1,0 +1,155 @@
+﻿<UserControl x:Class="Igris.NovelCreator.Views.ChapterListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:converters="clr-namespace:Igris.NovelCreator.Converters"
+             xmlns:viewModels="clr-namespace:Igris.NovelCreator.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance viewModels:ChapterListViewModel}">
+    <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <LinearGradientBrush x:Key="Igris.Brushes.Linear" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="{DynamicResource MahApps.Colors.ThemeBackground}" Offset="0.0"/>
+            <GradientStop Color="{DynamicResource MahApps.Colors.AccentBase}" Offset="0.5"/>
+            <GradientStop Color="{DynamicResource MahApps.Colors.ThemeBackground}" Offset="1.0"/>
+        </LinearGradientBrush>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static ApplicationCommands.Find}" Executed="Find_Executed" />
+    </UserControl.CommandBindings>
+    <UserControl.InputBindings>
+        <KeyBinding Key="F" Command="{x:Static ApplicationCommands.Find}" Modifiers="Ctrl"/>
+    </UserControl.InputBindings>
+    <Grid>
+        <Grid Visibility="{Binding ContentIsOpen, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=invert}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0"
+                    Height="36"
+                    Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                    BorderThickness="0 0 0 1"
+                    DockPanel.Dock="Top">
+                <DockPanel LastChildFill="True">
+                    <Button x:Name="LeaveButton" Margin="2" DockPanel.Dock="Left" Style="{DynamicResource Igris.Styles.Button.Close}"
+                            Content="{iconPacks:Material Kind=Close, Width=12, Height=12}" Command="{Binding CloseCommand}"/>
+                    <TextBox x:Name="FilterTextBox"
+                             MinWidth="400"
+                             Margin="4,2"
+                             mah:TextBoxHelper.Watermark="Filtrer par... (Ctrl+F)"
+                             Background="{DynamicResource MahApps.Brushes.Gray10}"
+                             BorderThickness="0"
+                             DockPanel.Dock="Right"
+                             Style="{DynamicResource Igris.Styles.TextBox.Search}"
+                             Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=300}"/>
+                    <Grid/>
+                </DockPanel>
+            </Border>
+            <ScrollViewer Grid.Row="1" Margin="2,0,2,2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <Border Height="35" Background="{DynamicResource Igris.Brushes.Linear}">
+                        <TextBlock Margin="5" FontSize="19" Text="{Binding Novel.Title}"/>
+                    </Border>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="220"/>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.RowSpan="12" Margin="2" VerticalAlignment="Top" Source="{Binding Novel.Cover}"/>
+                        <TextBlock Margin="3,0" Grid.Column="1" VerticalAlignment="Center" Text="Titre alternatif:" FontWeight="Bold" FontSize="14"/>
+                        <TextBlock Grid.Column="2" VerticalAlignment="Center" FontWeight="Light" FontSize="14" Text="{Binding Novel.AlternativeTitle}"/>
+                        <Border Height="1" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Background="{DynamicResource Igris.Brushes.Linear}"/>
+                        <TextBlock Margin="3,0" Text="Auteur:" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                        <TextBlock Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" FontWeight="Light" FontSize="14" Text="{Binding Novel.Author}"/>
+                        <Border Height="1" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Background="{DynamicResource Igris.Brushes.Linear}"/>
+                        <TextBlock Margin="3,0" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" FontWeight="Bold" FontSize="14" Text="Année:"/>
+                        <TextBlock Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" FontWeight="Light" FontSize="14" Text="{Binding Novel.CreationDate.Year}"/>
+                        <Border Height="1" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" Background="{DynamicResource Igris.Brushes.Linear}"/>
+                        <TextBlock Margin="3,0" Grid.Column="1" Grid.Row="6" FontWeight="Bold" FontSize="14" Text="Auteur:"/>
+                        <ItemsControl x:Name="GenresList" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center" Focusable="False" ItemsSource="{Binding Novel.Genres}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border x:Name="GenresBorder" Margin="2" Background="{DynamicResource MahApps.Brushes.Gray10}" BorderThickness="1"
+                                            BorderBrush="{DynamicResource MahApps.Brushes.Button.Border}" Padding="4,2" CornerRadius="3">
+                                        <TextBlock x:Name="GenresText" Text="{Binding}"/>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Border Height="1" Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="2" Background="{DynamicResource Igris.Brushes.Linear}"/>
+                        <TextBlock Margin="3,0" Grid.Column="1" Grid.Row="8" VerticalAlignment="Center" FontWeight="Bold" FontSize="14" Text="Statut:"/>
+                        <TextBlock Grid.Row="8" Grid.Column="2" VerticalAlignment="Center" FontWeight="Light" FontSize="14" Text="{Binding OnGoing}"/>
+                        <Border Height="1" Grid.Column="1" Grid.Row="9" Grid.ColumnSpan="2" Background="{DynamicResource Igris.Brushes.Linear}"/>
+                        <TextBlock Margin="3,0" Grid.Column="1" Grid.Row="10" FontWeight="Bold" FontSize="14" Text="Description:"/>
+                        <TextBlock Grid.Row="10" Grid.Column="2" Margin="0,0,5,0" FontWeight="Light" FontSize="13"
+                                   Text="{Binding Novel.Synopsy}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
+                        <Border Grid.Column="1" Grid.Row="11" Grid.ColumnSpan="2" Margin="0,0,0,4" VerticalAlignment="Bottom" Height="1" Background="{DynamicResource Igris.Brushes.Linear}"/>
+                    </Grid>
+                    <ItemsControl x:Name="VolumeList" ItemsSource="{Binding Novel.Volumes}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Expander Margin="2,0" Header="{Binding Title}" mah:ControlsHelper.ContentCharacterCasing="Normal" IsExpanded="True">
+                                    <ItemsControl x:Name="ChaptersList" Margin="-2" ItemsSource="{Binding Chapters}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button x:Name="OpenChapterButton" Margin="2" CommandParameter="{Binding}"
+                                                    Command="{Binding DataContext.OpenChapterCommand, ElementName=VolumeList}">
+                                                    <Button.Template>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border x:Name="novelBorder" Height="35" BorderThickness="0" Background="{DynamicResource MahApps.Brushes.Gray10}">
+                                                                <StackPanel Margin="10 0" Orientation="Horizontal">
+                                                                    <TextBlock VerticalAlignment="Center" FontSize="14" Text="Chapitre "/>
+                                                                    <TextBlock VerticalAlignment="Center" FontSize="14" Text="{Binding Id}"/>
+                                                                    <TextBlock VerticalAlignment="Center" FontSize="14" Text=" : "/>
+                                                                    <TextBlock VerticalAlignment="Center" FontSize="14" Text="{Binding Title}" TextTrimming="CharacterEllipsis"/>
+                                                                </StackPanel>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Background" TargetName="novelBorder" Value="{DynamicResource MahApps.Brushes.Gray8}"/>
+                                                                </Trigger>
+                                                                <Trigger Property="IsPressed" Value="True">
+                                                                    <Setter Property="Background" TargetName="novelBorder" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Button.Template>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Expander>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+        <ContentControl x:Name="ChapterReading" Focusable="False" Content="{Binding ContentControl}"/>
+    </Grid>
+</UserControl>

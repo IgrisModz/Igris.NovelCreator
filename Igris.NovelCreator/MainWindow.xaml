@@ -1,0 +1,98 @@
+﻿<mah:MetroWindow x:Class="Igris.NovelCreator.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                 xmlns:viewModels="clr-namespace:Igris.NovelCreator.ViewModels"
+                 mc:Ignorable="d"
+                 WindowStartupLocation="CenterScreen"
+                 TitleCharacterCasing="Normal"
+                 GlowBrush="{DynamicResource MahApps.Brushes.AccentBase}"
+                 WindowTitleBrush="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                 NonActiveWindowTitleBrush="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                 Title="Novel Creator"
+                 MinHeight="500" MinWidth="883"
+                 Height="550" Width="1000">
+    <mah:MetroWindow.DataContext>
+        <viewModels:MainViewModel/>
+    </mah:MetroWindow.DataContext>
+    <mah:MetroWindow.IconTemplate>
+        <DataTemplate>
+            <Grid Width="{TemplateBinding Width}"
+                  Height="{TemplateBinding Height}"
+                  Margin="4 4 0 4"
+                  Background="Transparent"
+                  RenderOptions.EdgeMode="Aliased"
+                  RenderOptions.BitmapScalingMode="HighQuality">
+                <Image Source="/Images/book.ico"/>
+            </Grid>
+        </DataTemplate>
+    </mah:MetroWindow.IconTemplate>
+    <mah:MetroWindow.Resources>
+        <DataTemplate x:Key="HamburgerMenuItem" DataType="{x:Type mah:HamburgerMenuIconItem}">
+            <DockPanel Height="48" LastChildFill="True">
+                <Grid x:Name="IconPart"
+                      Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:HamburgerMenu}}, Path=CompactPaneLength}"
+                      DockPanel.Dock="Left">
+                    <Image Margin="12"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Source="{Binding Icon}"/>
+                </Grid>
+                <TextBlock x:Name="TextPart"
+                           VerticalAlignment="Center"
+                           FontSize="16"
+                           Text="{Binding Label}"/>
+            </DockPanel>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:HamburgerMenu}}, Path=PanePlacement}" Value="Right">
+                    <Setter TargetName="IconPart" Property="DockPanel.Dock" Value="Right"/>
+                    <Setter TargetName="TextPart" Property="Margin" Value="8 0 0 0"/>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </mah:MetroWindow.Resources>
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Height="1" BorderThickness="0 1 0 0" VerticalAlignment="Top">
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="{DynamicResource MahApps.Colors.ThemeBackground}" Offset="0.0"/>
+                    <GradientStop Color="{DynamicResource MahApps.Colors.AccentBase}" Offset="0.5"/>
+                    <GradientStop Color="{DynamicResource MahApps.Colors.ThemeBackground}" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+        </Border>
+        <mah:HamburgerMenu x:Name="HamburgerMenuControl"
+                           DisplayMode="CompactOverlay"
+                           HamburgerWidth="48"
+                           ItemInvoked="HamburgerMenuControl_OnItemInvoked"
+                           ItemTemplate="{DynamicResource HamburgerMenuItem}"
+                           SelectedIndex="0"
+                           VerticalScrollBarOnLeftSide="False">
+            <mah:HamburgerMenu.ItemsSource>
+                <mah:HamburgerMenuItemCollection>
+                    <mah:HamburgerMenuIconItem Icon="{iconPacks:FontAwesomeImage Kind=BookSolid, Brush=LightGray}" Label="Création" Tag="{Binding CreationView}"/>
+                    <mah:HamburgerMenuIconItem Icon="{iconPacks:FontAwesomeImage Kind=BookReaderSolid, Brush=LightGray}" Label="Lecture" Tag="{Binding ReadingView}"/>
+                </mah:HamburgerMenuItemCollection>
+            </mah:HamburgerMenu.ItemsSource>
+            <mah:HamburgerMenu.ContentTemplate>
+                <DataTemplate>
+                    <Grid x:Name="ContentGrid">
+                        <mah:TransitioningContentControl Grid.Row="1" Content="{Binding}" RestartTransitionOnContentChange="True" Transition="Default">
+                            <mah:TransitioningContentControl.Resources>
+                                <DataTemplate DataType="{x:Type mah:HamburgerMenuGlyphItem}">
+                                    <Image Source="{Binding Glyph, Mode=OneWay, Converter={mah:NullToUnsetValueConverter}}"/>
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type mah:HamburgerMenuIconItem}">
+                                    <ContentControl Content="{Binding Tag, Mode=OneWay}" Focusable="True" IsTabStop="False"/>
+                                </DataTemplate>
+                            </mah:TransitioningContentControl.Resources>
+                        </mah:TransitioningContentControl>
+                    </Grid>
+                </DataTemplate>
+            </mah:HamburgerMenu.ContentTemplate>
+        </mah:HamburgerMenu>
+    </DockPanel>
+</mah:MetroWindow>

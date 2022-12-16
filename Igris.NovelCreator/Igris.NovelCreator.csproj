@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Images\book.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\book.ico" />
+    <None Remove="Images\ImageNA.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
+    <PackageReference Include="MahApps.Metro.IconPacks.FontAwesome" Version="4.11.0" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.11.0" />
+    <PackageReference Include="MahApps.Metro.IconPacks.MaterialDesign" Version="4.11.0" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Modern" Version="4.11.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Igris.Mvvm\Igris.Mvvm.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\book.ico" />
+    <Resource Include="Images\ImageNA.png" />
+  </ItemGroup>
+
+</Project>

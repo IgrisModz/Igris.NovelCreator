@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32602.291
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Igris.NovelCreator", "Igris.NovelCreator\Igris.NovelCreator.csproj", "{049C165A-8D87-43B6-9FB2-92663C65D89B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Igris.Mvvm", "Igris.Mvvm\Igris.Mvvm.csproj", "{201A7053-D463-4559-891F-89EA77B8099D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{049C165A-8D87-43B6-9FB2-92663C65D89B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{049C165A-8D87-43B6-9FB2-92663C65D89B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{049C165A-8D87-43B6-9FB2-92663C65D89B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{049C165A-8D87-43B6-9FB2-92663C65D89B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{201A7053-D463-4559-891F-89EA77B8099D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{201A7053-D463-4559-891F-89EA77B8099D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{201A7053-D463-4559-891F-89EA77B8099D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{201A7053-D463-4559-891F-89EA77B8099D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {91A5C1C6-0039-4890-BEBC-7FDD2122FAFC}
+	EndGlobalSection
+EndGlobal

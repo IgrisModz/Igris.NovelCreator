@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="Igris.NovelCreator.Views.ChapterCreationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:converters="clr-namespace:Igris.NovelCreator.Converters"
+             xmlns:models="clr-namespace:Igris.NovelCreator.Models"
+             xmlns:viewModels="clr-namespace:Igris.NovelCreator.ViewModels"
+             xmlns:views="clr-namespace:Igris.NovelCreator.Views"
+             mc:Ignorable="d"
+             mah:DialogParticipation.Register="{Binding}"
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance viewModels:ChapterCreationViewModel}">
+    <UserControl.Resources>
+        <converters:FlowDocumentToXamlConverter x:Key="FlowDocumentToXamlConverter"/>
+        <ObjectDataProvider x:Key="TypeEnum" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:ChapterType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+    <UserControl.InputBindings>
+        <KeyBinding Key="S" Command="{Binding AddModifyCommand}" Modifiers="Ctrl"/>
+        <KeyBinding Key="A" Command="{Binding CancelCommand}" Modifiers="Ctrl"/>
+    </UserControl.InputBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock x:Name="IdLbl" Margin="2" Width="400" HorizontalAlignment="Left" Text="Id:"/>
+            <mah:NumericUpDown x:Name="IdNum" Margin="2" Width="400" HorizontalAlignment="Left"
+                               TextAlignment="Left" HideUpDownButtons="True" NumericInputMode="Decimal"
+                               Minimum="0" Maximum="2147483647" Value="{Binding Chapter.Id}"/>
+            <TextBlock x:Name="TitleLbl" Margin="2" Width="400" HorizontalAlignment="Left" Text="Titre:"/>
+            <TextBox x:Name="TitleText" Margin="2" Width="400" HorizontalAlignment="Left" Text="{Binding Chapter.Title, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock x:Name="TypeLbl" Margin="2" Width="400" HorizontalAlignment="Left" Text="Type:"/>
+            <ComboBox x:Name="TypeComboBox" Margin="2" Width="400" HorizontalAlignment="Left"
+                      ItemsSource="{Binding Source={StaticResource TypeEnum}}" SelectedItem="{Binding Chapter.Type}"/>
+            <TextBlock x:Name="AuthorDescriptionLbl" Margin="2" Width="400" HorizontalAlignment="Left" Text="Description de l'auteur"/>
+            <TextBox x:Name="AuthorDescriptionText" Margin="2" Width="400" HorizontalAlignment="Left" Text="{Binding Chapter.AuthorDescription, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock x:Name="TextLbl" Margin="2" Width="400" HorizontalAlignment="Left" Text="Texte:"/>
+        </StackPanel>
+        <TextBox x:Name="TextBox" Grid.Row="1" Margin="2" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="{Binding Chapter.Text, UpdateSourceTrigger=PropertyChanged}"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="AddModifyButton" Margin="2" Width="90" Style="{DynamicResource Igris.Styles.Button}" Command="{Binding AddModifyCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:Material Kind="Send"/>
+                    <TextBlock Margin="2,0,0,0" Text="{Binding IsModify}"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="CancelButton" Margin="2" Width="90" Style="{DynamicResource Igris.Styles.Button}"  Command="{Binding CancelCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:Material Kind="Cancel"/>
+                    <TextBlock Margin="2,0,0,0" Text="Annuler"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,23 @@
+﻿<Window x:Class="Igris.NovelCreator.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:Igris.NovelCreator.ViewModels"
+        mc:Ignorable="d"
+        Title="Window1" SizeToContent="WidthAndHeight"
+        d:DataContext="{d:DesignInstance viewModels:Class1}">
+    <Window.Resources>
+        <LinearGradientBrush x:Key="MaCouleur" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="White" Offset="0.0"/>
+            <GradientStop Color="Red" Offset="0.5"/>
+            <GradientStop Color="White" Offset="1.0"/>
+        </LinearGradientBrush>
+    </Window.Resources>
+    <StackPanel Width="200">
+        <TextBox x:Name="TestString" Margin="10" Text="{Binding TestString, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox x:Name="TestStr" Margin="10" Text="{Binding TestStr}"/>
+        <Button x:Name="TestButton" Margin="10" Content="{Binding TT.TimeOfDay, ConverterCulture=fr-FR, StringFormat={}{0:D}}" Command="{Binding TestCommand}"/>
+        <Button x:Name="TestParamButton" Margin="10" Content="Test Param" Background="{DynamicResource MaCouleur}" Command="{Binding TestParamCommand}" CommandParameter="{Binding Text, ElementName=TestString}"/>
+    </StackPanel>
+</Window>

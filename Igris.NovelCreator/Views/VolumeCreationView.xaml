@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="Igris.NovelCreator.Views.VolumeCreationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:models="clr-namespace:Igris.NovelCreator.Models"
+             xmlns:viewModels="clr-namespace:Igris.NovelCreator.ViewModels"
+             mc:Ignorable="d"
+             mah:DialogParticipation.Register="{Binding}"
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance viewModels:VolumeCreationViewModel}">
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="TypeEnum" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:VolumeType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+    <UserControl.InputBindings>
+        <KeyBinding Key="S" Command="{Binding AddModifyCommand}" Modifiers="Ctrl"/>
+        <KeyBinding Key="A" Command="{Binding CancelCommand}" Modifiers="Ctrl"/>
+    </UserControl.InputBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="TitleLbl" Margin="2" Width="400" HorizontalAlignment="Left" Text="Titre:"/>
+        <TextBox x:Name="TitleText" Grid.Row="1" Margin="2" Width="400" HorizontalAlignment="Left" Text="{Binding Volume.Title, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock x:Name="TypeLbl" Grid.Row="2" Margin="2" Width="400" HorizontalAlignment="Left" Text="Type:"/>
+        <ComboBox x:Name="TypeComboBox" Grid.Row="3" Margin="2" Width="400" HorizontalAlignment="Left"
+                  ItemsSource="{Binding Source={StaticResource TypeEnum}}" SelectedItem="{Binding Volume.Type}"/>
+        <Border Grid.Row="5" Margin="2,0" Height="1">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="{DynamicResource MahApps.Colors.ThemeBackground}" Offset="0.0"/>
+                    <GradientStop Color="{DynamicResource MahApps.Colors.AccentBase}" Offset="0.5"/>
+                    <GradientStop Color="{DynamicResource MahApps.Colors.ThemeBackground}" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+        <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="AddModifyButton" Margin="2" Width="80" Command="{Binding AddModifyCommand}" Style="{DynamicResource Igris.Styles.Button}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:Material Kind="Send"/>
+                    <TextBlock Margin="2,0,0,0" Text="{Binding IsModify}"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="CancelButton" Margin="2" Width="80" Command="{Binding CancelCommand}" Style="{DynamicResource Igris.Styles.Button}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:Material Kind="Cancel"/>
+                    <TextBlock Margin="2,0,0,0" Text="Annuler"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

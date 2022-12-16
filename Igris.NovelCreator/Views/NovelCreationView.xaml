@@ -1,0 +1,125 @@
+﻿<UserControl x:Class="Igris.NovelCreator.Views.NovelCreationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:converters="clr-namespace:Igris.NovelCreator.Converters"
+             xmlns:models="clr-namespace:Igris.NovelCreator.Models"
+             xmlns:viewModels="clr-namespace:Igris.NovelCreator.ViewModels"
+             mc:Ignorable="d"
+             mah:DialogParticipation.Register="{Binding}"
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance viewModels:NovelCreationViewModel}">
+    <UserControl.Resources>
+        <converters:EnumNameToStringConverter x:Key="EnumNameToStringConverter"/>
+        <ObjectDataProvider x:Key="GenresEnum" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:Genres"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+    <UserControl.InputBindings>
+        <KeyBinding Key="S" Command="{Binding AddModifyNovelCommand}" Modifiers="Ctrl"/>
+        <KeyBinding Key="A" Command="{Binding CancelCommand}" Modifiers="Ctrl"/>
+    </UserControl.InputBindings>
+    <Grid Margin="2">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="TitleLbl" Margin="2" Text="Nom:"/>
+        <TextBox x:Name="TitleText" Grid.Row="1" Margin="2" Text="{Binding Novel.Title, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock x:Name="AlternativeTitleLbl" Grid.Row="2" Margin="2" Text="Titre alternatif:"/>
+        <TextBox x:Name="AlternativeTitleText" Grid.Row="3" Margin="2" Text="{Binding Novel.AlternativeTitle, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock x:Name="AuthorLbl" Grid.Row="4" Margin="2" Text="Auteur:"/>
+        <TextBox x:Name="AuthorText" Grid.Row="5" Margin="2" Text="{Binding Novel.Author, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock x:Name="GenresLbl" Grid.Row="6" Margin="2" Text="Genres:"/>
+        <Grid Grid.Row="7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ComboBox x:Name="GenresComboBox" Margin="2" ItemsSource="{Binding Source={StaticResource GenresEnum}, Converter={StaticResource EnumNameToStringConverter}}" SelectedIndex="0"/>
+            <Button x:Name="AddGenresButton" Grid.Column="1" Margin="2" Content="{iconPacks:FontAwesome Kind=PlusSolid}"
+                    mah:ControlsHelper.CornerRadius="0" mah:ControlsHelper.ContentCharacterCasing="Normal"
+                    Command="{Binding AddGenresCommand}" CommandParameter="{Binding SelectedItem, ElementName=GenresComboBox}"/>
+            <Button x:Name="DeleteAllGenresButton" Grid.Column="2" Margin="2" Content="{iconPacks:FontAwesome Kind=TrashSolid}"
+                    mah:ControlsHelper.CornerRadius="0" mah:ControlsHelper.ContentCharacterCasing="Normal"
+                    Command="{Binding DeleteAllGenresCommand}"/>
+        </Grid>
+        <TextBlock x:Name="SynopsyLbl" Grid.Row="8" Margin="2" Text="Synopsy:"/>
+        <TextBox x:Name="SynopsyText" Grid.Row="9" Margin="2" Text="{Binding Novel.Synopsy, UpdateSourceTrigger=PropertyChanged}"
+                 TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="False"/>
+        <Grid Grid.Column="1" Grid.RowSpan="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="280"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border Margin="2" BorderThickness="1" BorderBrush="{DynamicResource MahApps.Brushes.Button.Border}">
+                <Image x:Name="CoverImage" Height="280" Stretch="Fill" Source="{Binding Novel.Cover}"/>
+            </Border>
+            <Button x:Name="AddCoverButton" Grid.Row="1" Margin="2" Width="Auto"
+                    Style="{DynamicResource Igris.Styles.Button}"
+                    mah:ControlsHelper.CornerRadius="0"
+                    Command="{Binding AddModifyCoverCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:Material Kind="FileImage"/>
+                    <TextBlock Margin="2,0,0,0" Text="{Binding IsModify}"/>
+                    <TextBlock Text=" la couverture"/>
+                </StackPanel>
+            </Button>
+            <CheckBox x:Name="OnGoingCheckBox" Grid.Row="2" Margin="2" Content="En cours" FlowDirection="RightToLeft" HorizontalContentAlignment="Right" IsChecked="{Binding Novel.OnGoing}"/>
+            <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto">
+                <ItemsControl x:Name="GenresList" Focusable="False" ItemsSource="{Binding Novel.Genres}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border x:Name="GenresBorder" Margin="2" Background="{DynamicResource MahApps.Brushes.Gray10}" BorderThickness="1"
+                                    BorderBrush="{DynamicResource MahApps.Brushes.Button.Border}" Padding="4,2" CornerRadius="3">
+                                <TextBlock x:Name="GenresText" Text="{Binding}"/>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <Button x:Name="AddNovelButton" Margin="2" Width="90" Style="{DynamicResource Igris.Styles.Button}"
+                        mah:ControlsHelper.CornerRadius="0" Command="{Binding AddModifyNovelCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:Material Kind="Send"/>
+                        <TextBlock Margin="2,0,0,0" Text="{Binding IsModify}"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="CancelNovelButton" Margin="2" Width="90" Style="{DynamicResource Igris.Styles.Button}" Command="{Binding CancelCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:Material Kind="Cancel"/>
+                        <TextBlock Margin="2,0,0,0" Text="Annuler"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
